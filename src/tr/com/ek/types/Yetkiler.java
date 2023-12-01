@@ -18,7 +18,7 @@ public class Yetkiler {
 	
 	@Override
 	public String toString( ) {
-		return id + " " + adi;
+		return adi;
 		
 	}
 }

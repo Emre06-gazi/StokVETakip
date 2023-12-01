@@ -1,7 +1,9 @@
 package tr.com.ek.fe;
 
 import java.awt.GridLayout;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -9,13 +11,18 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import tr.com.ek.dal.KategoriDAL;
+import tr.com.ek.dal.UrunlerDAL;
 import tr.com.ek.interfaces.FeInterfaces;
+import tr.com.ek.types.KategoriContract;
+import tr.com.ek.types.UrunlerContract;
 
 public class UrunEkleFE extends JDialog implements FeInterfaces{
 	
@@ -49,7 +56,7 @@ public class UrunEkleFE extends JDialog implements FeInterfaces{
 		panel.add(adiField);
 		JLabel kategoriLabel = new JLabel("Kategori Seç:",JLabel.RIGHT);
 		panel.add(kategoriLabel);
-		JComboBox kategoriBox = new JComboBox();
+		JComboBox kategoriBox = new JComboBox(new KategoriDAL().GetAll().toArray());
 		panel.add(kategoriBox);
 		JLabel tarihLabel = new JLabel("Tarih Seç:",JLabel.RIGHT);
 		panel.add(tarihLabel);
@@ -62,6 +69,29 @@ public class UrunEkleFE extends JDialog implements FeInterfaces{
 		
 		JButton kaydetButton = new JButton("Kaydet");
 		panel.add(kaydetButton);
+		
+		kaydetButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UrunlerContract contract = new UrunlerContract();
+				
+				KategoriContract casContract = (KategoriContract) kategoriBox.getSelectedItem();
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				
+				String date = format.format(tarihDate.getDate());
+				contract.setAdi(adiField.getText());
+				contract.setKategoriId(casContract.getId());
+				contract.setTarih(date);
+				contract.setFiyat(Float.parseFloat(fiyatField.getText()));
+				
+				new UrunlerDAL().Insert(contract);
+				JOptionPane.showMessageDialog(null, contract.getAdi() +" adlı ürün eklenmiştir.");
+				
+			}
+			
+		});
+		
 		JButton iptalButton = new JButton("İptal");
 		panel.add(iptalButton);
 		

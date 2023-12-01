@@ -1,12 +1,10 @@
 package tr.com.ek.types;
 
-import java.sql.Date;
-
 public class UrunlerContract {
 	private int id;
 	private String adi;
 	private int kategoriId;
-	private Date tarih;
+	private String tarih;
 	private float fiyat;
 	
 	public float getFiyat() {
@@ -33,10 +31,10 @@ public class UrunlerContract {
 	public void setKategoriId(int kategoriId) {
 		this.kategoriId = kategoriId;
 	}
-	public Date getTarih() {
+	public String getTarih() {
 		return tarih;
 	}
-	public void setTarih(Date tarih) {
+	public void setTarih(String tarih) {
 		this.tarih = tarih;
 	}
 	@Override

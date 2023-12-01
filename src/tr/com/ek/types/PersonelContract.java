@@ -25,7 +25,7 @@ public class PersonelContract {
 	}
 	@Override
 	public String toString( ) {
-		return id + " " + adiSoyadi + " " + email;
+		return adiSoyadi;
 		
 	}
 }

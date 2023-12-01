@@ -15,50 +15,47 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import com.toedter.calendar.JDateChooser;
-
 import tr.com.ek.dal.KategoriDAL;
+import tr.com.ek.dal.PersonelDAL;
 import tr.com.ek.interfaces.FeInterfaces;
 import tr.com.ek.types.KategoriContract;
+import tr.com.ek.types.PersonelContract;
 
-public class KategoriEkleFE extends JDialog implements FeInterfaces{
+public class PersonelEkleFE extends JDialog implements FeInterfaces{
 
-	public KategoriEkleFE() {
+	public PersonelEkleFE() {
 		initPencere();
 	}
 
 	@Override
 	public void initPencere() {
-		
 		JPanel panel = initPanel();
 		
-		panel.setBorder(BorderFactory.createTitledBorder("Kategori Kayıt Alanı"));
+		panel.setBorder(BorderFactory.createTitledBorder("Personel Kayıt Alanı"));
 		
 		add(panel);
 		
-		setTitle("Kategori Ekle");
+		setTitle("Personel Ekle");
 		pack();
 		setModalityType(DEFAULT_MODALITY_TYPE);// üst üste açılan pencerelerde arkadaki pencereye tıklanmasını önler.
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
+		
 	}
 
 	@Override
 	public JPanel initPanel() {
 		JPanel panel = new JPanel(new GridLayout(3, 2));
 		
-		JLabel adiLabel = new JLabel("Kategori Adı:",JLabel.RIGHT);
+		JLabel adiLabel = new JLabel("Personel Adı:",JLabel.RIGHT);
 		panel.add(adiLabel);
 		JTextField adiField = new JTextField(10);
 		panel.add(adiField);
-		JLabel kategoriLabel = new JLabel("Kategori Seç:",JLabel.RIGHT);
-		panel.add(kategoriLabel);
-		JComboBox kategoriBox = new JComboBox(new KategoriDAL().GetAllParentId().toArray());
-		panel.add(kategoriBox);
-		kategoriBox.insertItemAt("-Kategori Seçiniz-", 0);
-		kategoriBox.setSelectedIndex(0); //"-Kategori Seçiniz-" değeri varsayılan olarak seçili gelmesi için yazılmıştır
-		
+		JLabel emailLabel = new JLabel("Email Adresi Giriniz:",JLabel.RIGHT);
+		panel.add(emailLabel);
+		JTextField emailField = new JTextField(10);
+		panel.add(emailField);
 		JButton kaydetButton = new JButton("Kaydet");
 		panel.add(kaydetButton);
 		
@@ -66,22 +63,13 @@ public class KategoriEkleFE extends JDialog implements FeInterfaces{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				KategoriContract contract = new KategoriContract();
+				PersonelContract contract = new PersonelContract();
+				contract.setAdiSoyadi(adiField.getText());
+				contract.setEmail(emailField.getText());
 				
-				if(kategoriBox.getSelectedIndex()!=0) {
-					KategoriContract casContract = (KategoriContract) kategoriBox.getSelectedItem();
-					contract.setAdi(adiField.getText());
-					contract.setParentId(casContract.getId());
-					
-					new KategoriDAL().Insert(contract);
-					JOptionPane.showMessageDialog(null, contract.getAdi() +" adlı kategori eklenmiştir.");
-				} else {
-					contract.setAdi(adiField.getText());
-					contract.setParentId(kategoriBox.getSelectedIndex());
-					
-					new KategoriDAL().Insert(contract);
-					JOptionPane.showMessageDialog(null, contract.getAdi() +" adlı kategori eklenmiştir.");
-				}
+				new PersonelDAL().Insert(contract);
+				JOptionPane.showMessageDialog(null, contract.getAdiSoyadi() +" adlı personel eklenmiştir.");
+				
 			}
 			
 		});

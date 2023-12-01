@@ -25,7 +25,7 @@ public class KategoriContract {
 	}
 	@Override
 	public String toString( ) {
-		return id + " " + adi + " " + parentId;
+		return adi;
 		
 	}
 }

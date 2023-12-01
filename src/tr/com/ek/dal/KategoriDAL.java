@@ -26,8 +26,7 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	@Override
@@ -56,6 +55,32 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 		return datacontract;
 	}
 
+	
+	public List<KategoriContract> GetAllParentId() {
+		
+		List<KategoriContract> datacontract = new ArrayList<KategoriContract>();
+		Connection connection = getConnection();
+		KategoriContract contract;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Kategori Where parentId = 0");
+			while(resultSet.next()) {
+				contract = new KategoriContract();
+				contract.setId(resultSet.getInt("Id"));
+				contract.setAdi(resultSet.getString("Adi"));
+				contract.setParentId(resultSet.getInt("ParentId"));
+				
+				datacontract.add(contract);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return datacontract;
+	}
+	
 	@Override
 	public KategoriContract Delete(KategoriContract Entity) {
 		// TODO Auto-generated method stub

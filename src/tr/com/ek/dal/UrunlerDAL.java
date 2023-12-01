@@ -2,15 +2,28 @@ package tr.com.ek.dal;
 
 import tr.com.ek.interfaces.DALInterfaces;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import tr.com.ek.core.ObjectHelper;
+import tr.com.ek.types.UrunlerContract;
 
-public class UrunlerDAL<UrunlerContract> extends ObjectHelper implements DALInterfaces<UrunlerContract>{
+public class UrunlerDAL extends ObjectHelper implements DALInterfaces<UrunlerContract>{
 
 	@Override
 	public void Insert(UrunlerContract entity) {
-		// TODO Auto-generated method stub
+		Connection connection = getConnection();
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate("INSERT INTO Urunler (Adi, KategoriId, Tarih, Fiyat) Values ('"+ entity.getAdi() +"', "+ entity.getId() +",'"+ entity.getTarih()+ "', "+ entity.getFiyat()+")");
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
