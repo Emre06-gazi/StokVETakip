@@ -1,22 +1,59 @@
 package tr.com.ek.dal;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import tr.com.ek.core.ObjectHelper;
 import tr.com.ek.interfaces.DALInterfaces;
+import tr.com.ek.types.KategoriContract;
 
-public class KategoriDAL<KategoriContract> extends ObjectHelper implements DALInterfaces<KategoriContract>{
+public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriContract>{
 
 	@Override
 	public void Insert(KategoriContract entity) {
-		// TODO Auto-generated method stub
+		Connection connection = getConnection();
+		try {
+			Statement statement = connection.createStatement();
+			
+			statement.executeUpdate("INSERT INTO Kategori (Adi, ParentId) VALUES('"+entity.getAdi()+"',"+entity.getParentId()+")"); //Burada "" içinde '' kulanımı değer string oldugu için, "" kullanımı ise değer integer oldugu ıcın
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 
 	@Override
 	public List<KategoriContract> GetAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<KategoriContract> datacontract = new ArrayList<KategoriContract>();
+		Connection connection = getConnection();
+		KategoriContract contract;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Kategori");
+			while(resultSet.next()) {
+				contract = new KategoriContract();
+				contract.setId(resultSet.getInt("Id"));
+				contract.setAdi(resultSet.getString("Adi"));
+				contract.setParentId(resultSet.getInt("ParentId"));
+				
+				datacontract.add(contract);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return datacontract;
 	}
 
 	@Override

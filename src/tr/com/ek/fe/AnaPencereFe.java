@@ -1,11 +1,14 @@
 package tr.com.ek.fe;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import tr.com.ek.interfaces.FeInterfaces;
+import tr.com.ek.utilities.MenulerCom;
 
 public class AnaPencereFe extends JFrame implements FeInterfaces{
 	
@@ -16,13 +19,14 @@ public class AnaPencereFe extends JFrame implements FeInterfaces{
 
 	@Override
 	public void initPencere() {
-		JTabbedPane tabs = initTabs();
+		//JTabbedPane tabs = initTabs();
 		JMenuBar bar = initBar(); 
 		
 		//add(tabs);
-		//setJMenuBar(bar);
+		setJMenuBar(bar);
 		setTitle("Satış Ve Stok Otomasyon Sistemi");	
-		pack(); //Textfieldların otomatik olarak "size" olması için yazdık
+		//pack(); //Textfieldların otomatik olarak "size" olması için yazdık
+		setSize(600, 250);
 		setVisible(true); //Sayfa açılsın
 		setLocationRelativeTo(null); //Proje merkezde konumlansın
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -30,14 +34,14 @@ public class AnaPencereFe extends JFrame implements FeInterfaces{
 
 	@Override
 	public JPanel initPanel() {
-		// TODO Auto-generated method stub
-		return null;
+		JPanel panel = new JPanel();
+		return panel;
 	}
 
 	@Override
 	public JMenuBar initBar() {
-		// TODO Auto-generated method stub
-		return null;
+		JMenuBar bar = MenulerCom.initBar();
+		return bar;
 	}
 
 	@Override
