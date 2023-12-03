@@ -39,7 +39,7 @@ public class UrunlerContract {
 	}
 	@Override
 	public String toString( ) {
-		return id + " " + adi + " " + kategoriId + " " + tarih + " " + fiyat;
+		return adi;
 		
 	}
 }

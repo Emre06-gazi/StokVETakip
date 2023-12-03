@@ -3,11 +3,14 @@ package tr.com.ek.dal;
 import tr.com.ek.interfaces.DALInterfaces;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import tr.com.ek.core.ObjectHelper;
+import tr.com.ek.types.KategoriContract;
 import tr.com.ek.types.UrunlerContract;
 
 public class UrunlerDAL extends ObjectHelper implements DALInterfaces<UrunlerContract>{
@@ -29,8 +32,28 @@ public class UrunlerDAL extends ObjectHelper implements DALInterfaces<UrunlerCon
 
 	@Override
 	public List<UrunlerContract> GetAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<UrunlerContract> datacontract = new ArrayList<UrunlerContract>();
+		Connection connection = getConnection();
+		UrunlerContract contract;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Urunler");
+			while(resultSet.next()) {
+				contract = new UrunlerContract();
+				contract.setId(resultSet.getInt("Id"));
+				contract.setAdi(resultSet.getString("Adi"));
+				contract.setKategoriId(resultSet.getInt("KategoriId"));
+				contract.setTarih(resultSet.getString("Tarih"));
+				
+				datacontract.add(contract);
+			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return datacontract;
 	}
 
 	@Override

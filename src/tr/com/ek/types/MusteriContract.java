@@ -38,7 +38,7 @@ public class MusteriContract {
 	}
 	@Override
 	public String toString( ) {
-		return id + " " + adiSoyadi + " " + telefon + " " + adres + " " + sehirId;
+		return adiSoyadi;
 		
 	}
 }

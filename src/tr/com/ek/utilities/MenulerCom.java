@@ -8,12 +8,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
+import tr.com.ek.dal.AccountDAL;
+import tr.com.ek.fe.KategoriDuzenleFE;
 import tr.com.ek.fe.KategoriEkleFE;
+import tr.com.ek.fe.LoginFe;
 import tr.com.ek.fe.MusteriEkleFE;
 import tr.com.ek.fe.PersonelEkleFE;
 import tr.com.ek.fe.SifreBelirleFE;
 import tr.com.ek.fe.UrunEkleFE;
 import tr.com.ek.fe.YetkiEkleFE;
+import tr.com.ek.types.PersonelContract;
 
 public class MenulerCom {
 	
@@ -66,7 +70,18 @@ public class MenulerCom {
         musteriMenu.add(musteriDuzenleItem);
         JMenuItem sehirDuzenleItem = new JMenuItem("Şehir Düzenle");
         musteriMenu.add(sehirDuzenleItem);
-
+        
+        /* YETKİ İŞLEMLERİ */
+        PersonelContract contract = (PersonelContract) LoginFe.emailBox.getSelectedItem();
+        
+        if (new AccountDAL().GetYetkiId(contract.getId()).getYetkiId() == 2) {
+        	personellerMenu.hide();// Burada yetkiId'si 2 olan kullancının personeller menüyü görmesini "hide" metodu ile engelledik.
+        } else if (new AccountDAL().GetYetkiId(contract.getId()).getYetkiId() == 3) {
+        	musteriMenu.hide();
+        	personellerMenu.hide();
+        	urunlerMenu.hide();
+        }
+        
         urunEkleItem.addActionListener(new ActionListener() {
         		
     		@Override
@@ -85,6 +100,15 @@ public class MenulerCom {
     		@Override
     		public void actionPerformed(ActionEvent e) {
 				new KategoriEkleFE();
+			}
+	      
+		});
+        
+        kategoriDuzenleItem.addActionListener(new ActionListener() {
+    		
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+				new KategoriDuzenleFE();
 			}
 	      
 		});

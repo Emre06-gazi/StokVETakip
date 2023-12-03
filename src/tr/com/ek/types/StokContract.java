@@ -6,8 +6,9 @@ public class StokContract {
 	private int id;
 	private int personelId;
 	private int urunId;
-	private Date tarih;
+	private String tarih;
 	private int adet;
+	
 	public int getId() {
 		return id;
 	}
@@ -26,10 +27,10 @@ public class StokContract {
 	public void setUrunId(int urunId) {
 		this.urunId = urunId;
 	}
-	public Date getTarih() {
+	public String getTarih() {
 		return tarih;
 	}
-	public void setTarih(Date tarih) {
+	public void setTarih(String tarih) {
 		this.tarih = tarih;
 	}
 	public int getAdet() {
@@ -40,7 +41,7 @@ public class StokContract {
 	}
 	@Override
 	public String toString( ) {
-		return id + " " + personelId + " " + urunId + " " + tarih + " " + adet; 
+		return id + " " + adet; 
 		
 	}
 }

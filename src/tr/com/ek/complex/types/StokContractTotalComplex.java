@@ -1,15 +1,14 @@
 package tr.com.ek.complex.types;
 
-import java.sql.Date;
-
-public class StokContractComplex {
+public class StokContractTotalComplex {
 
 	private int id;
 	private String urunAdi;
 	private String personelAdi;
 	private String tarih;
 	private int adet;
-
+	private int topla;
+	
 	public int getId() {
 		return id;
 	}
@@ -51,7 +50,7 @@ public class StokContractComplex {
 	}
 
 	public Object[] getVeriler() {
-		Object[] veriler = { id, urunAdi, personelAdi, tarih, adet };
+		Object[] veriler = { id, urunAdi, personelAdi, tarih, adet, topla };
 		return veriler;
 	}
 

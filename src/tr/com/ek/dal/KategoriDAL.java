@@ -11,15 +11,17 @@ import tr.com.ek.core.ObjectHelper;
 import tr.com.ek.interfaces.DALInterfaces;
 import tr.com.ek.types.KategoriContract;
 
-public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriContract>{
+public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriContract> {
 
 	@Override
 	public void Insert(KategoriContract entity) {
 		Connection connection = getConnection();
 		try {
 			Statement statement = connection.createStatement();
-			
-			statement.executeUpdate("INSERT INTO Kategori (Adi, ParentId) VALUES('"+entity.getAdi()+"',"+entity.getParentId()+")"); //Burada "" içinde '' kulanımı değer string oldugu için, "" kullanımı ise değer integer oldugu ıcın
+
+			statement.executeUpdate("INSERT INTO Kategori (Adi, ParentId) VALUES('" + entity.getAdi() + "',"
+					+ entity.getParentId() + ")"); // Burada "" içinde '' kulanımı değer string oldugu için, ""
+													// kullanımı ise değer integer oldugu ıcın
 			statement.close();
 			connection.close();
 		} catch (SQLException e) {
@@ -31,19 +33,19 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 
 	@Override
 	public List<KategoriContract> GetAll() {
-		
+
 		List<KategoriContract> datacontract = new ArrayList<KategoriContract>();
 		Connection connection = getConnection();
 		KategoriContract contract;
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM Kategori");
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				contract = new KategoriContract();
 				contract.setId(resultSet.getInt("Id"));
 				contract.setAdi(resultSet.getString("Adi"));
 				contract.setParentId(resultSet.getInt("ParentId"));
-				
+
 				datacontract.add(contract);
 
 			}
@@ -55,21 +57,20 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 		return datacontract;
 	}
 
-	
 	public List<KategoriContract> GetAllParentId() {
-		
+
 		List<KategoriContract> datacontract = new ArrayList<KategoriContract>();
 		Connection connection = getConnection();
 		KategoriContract contract;
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM Kategori Where parentId = 0");
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				contract = new KategoriContract();
 				contract.setId(resultSet.getInt("Id"));
 				contract.setAdi(resultSet.getString("Adi"));
 				contract.setParentId(resultSet.getInt("ParentId"));
-				
+
 				datacontract.add(contract);
 
 			}
@@ -80,7 +81,33 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 
 		return datacontract;
 	}
-	
+
+	public List<KategoriContract> GetSearchKategori(String kategoriAdi) {
+
+		List<KategoriContract> datacontract = new ArrayList<KategoriContract>();
+		Connection connection = getConnection();
+		KategoriContract contract;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement
+					.executeQuery("SELECT * FROM Kategori Where Adi Like '" + "%" + kategoriAdi + "%" + "' ");
+			while (resultSet.next()) {
+				contract = new KategoriContract();
+				contract.setId(resultSet.getInt("Id"));
+				contract.setAdi(resultSet.getString("Adi"));
+				contract.setParentId(resultSet.getInt("ParentId"));
+
+				datacontract.add(contract);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return datacontract;
+	}
+
 	@Override
 	public KategoriContract Delete(KategoriContract Entity) {
 		// TODO Auto-generated method stub
@@ -89,8 +116,19 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 
 	@Override
 	public void Update(KategoriContract Entity) {
-		// TODO Auto-generated method stub
-		
+		Connection connection = getConnection();
+		try {
+			Statement statement = connection.createStatement();
+
+			statement.executeUpdate("UPDATE Kategori SET Adi= '" + Entity.getAdi() + "', ParentId = "
+					+ Entity.getParentId() + " WHERE Id = " + Entity.getId() + "");
+			statement.close();
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -98,6 +136,5 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }
