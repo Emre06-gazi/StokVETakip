@@ -121,20 +121,46 @@ public class StokDAL extends ObjectHelper implements DALInterfaces<StokContract>
 		return null;
 	}
 
+	public void Delete(int stokId) {
+	    Connection connection = getConnection();
+	    try {
+	        Statement statement = connection.createStatement();
+	        statement.executeUpdate("DELETE FROM Stok WHERE Id = " + stokId);
+	        statement.close();
+	        connection.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 	@Override
-	public StokContract Delete(StokContract Entity) {
+	public void Update(StokContract entity) {
+	    Connection connection = getConnection();
+	    try {
+	        Statement statement = connection.createStatement();
+
+	        statement.executeUpdate("UPDATE Stok SET " +
+	                "PersonelId = " + entity.getPersonalId() + ", " +
+	                "UrunId = " + entity.getUrunId() + ", " +
+	                "Tarih = '" + entity.getTarih() + "', " +
+	                "Adet = " + entity.getAdet() + " " +
+	                "WHERE Id = " + entity.getId());
+
+	        statement.close();
+	        connection.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	@Override
+	public List<StokContract> GetById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void Update(StokContract Entity) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<StokContract> GetById(int id) {
+	public StokContract Delete(StokContract Entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}

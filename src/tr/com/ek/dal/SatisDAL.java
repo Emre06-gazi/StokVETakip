@@ -73,10 +73,38 @@ public class SatisDAL extends ObjectHelper implements DALInterfaces<SatisContrac
 	}
 
 	@Override
-	public void Update(SatisContract Entity) {
-		// TODO Auto-generated method stub
-		
+	public void Update(SatisContract entity) {
+	    Connection connection = getConnection();
+	    try {
+	        Statement statement = connection.createStatement();
+
+	        statement.executeUpdate("UPDATE Satis SET " +
+	                "PersonelId = " + entity.getPersonelId() + ", " +
+	                "UrunId = " + entity.getUrunId() + ", " +
+	                "MusteriId = " + entity.getMusteriId() + ", " +
+	                "Tarih = '" + entity.getTarih() + "', " +
+	                "Adet = " + entity.getAdet() + " " +
+	                "WHERE Id = " + entity.getId());
+
+	        statement.close();
+	        connection.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
+
+	public void Delete(int satisId) {
+	    Connection connection = getConnection();
+	    try {
+	        Statement statement = connection.createStatement();
+	        statement.executeUpdate("DELETE FROM Satis WHERE Id = " + satisId);
+	        statement.close();
+	        connection.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
 	@Override
 	public List<SatisContract> GetById(int id) {

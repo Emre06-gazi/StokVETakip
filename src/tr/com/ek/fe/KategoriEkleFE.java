@@ -88,6 +88,16 @@ public class KategoriEkleFE extends JDialog implements FeInterfaces{
 		
 		JButton iptalButton = new JButton("İptal");
 		panel.add(iptalButton);
+		
+		iptalButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 dispose();
+			}
+
+		});
+		
 		return panel;
 	}
 

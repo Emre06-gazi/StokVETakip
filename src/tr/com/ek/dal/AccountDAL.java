@@ -1,6 +1,7 @@
 package tr.com.ek.dal;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,6 +11,7 @@ import java.util.List;
 import tr.com.ek.core.ObjectHelper;
 import tr.com.ek.interfaces.DALInterfaces;
 import tr.com.ek.types.AccountsContract;
+import tr.com.ek.types.MusteriContract;
 
 public class AccountDAL extends ObjectHelper implements DALInterfaces<AccountsContract> {
 
@@ -87,10 +89,57 @@ public class AccountDAL extends ObjectHelper implements DALInterfaces<AccountsCo
 
 	@Override
 	public List<AccountsContract> GetAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		List<AccountsContract> datacontract = new ArrayList<AccountsContract>();
+		Connection connection = getConnection();
+		AccountsContract contract;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Accounts");
+			while (resultSet.next()) {
+				contract = new AccountsContract();
+				contract.setId(resultSet.getInt("Id"));
+				contract.setPersonelId(resultSet.getInt("PersonelId"));
+				contract.setYetkiId(resultSet.getInt("YetkiId"));
+				contract.setSifre(resultSet.getString("Sifre"));
 
+				datacontract.add(contract);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return datacontract;
+	}
+	
+	public List<AccountsContract> GetSearchMusteri(String personelId) {
+
+		List<AccountsContract> datacontract = new ArrayList<AccountsContract>();
+		Connection connection = getConnection();
+		AccountsContract contract;
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement
+					.executeQuery("SELECT * FROM Accounts Where PersonelId Like '" + "%" + personelId + "%" + "' ");
+			while (resultSet.next()) {
+				contract = new AccountsContract();
+				contract.setId(resultSet.getInt("Id"));
+				contract.setPersonelId(resultSet.getInt("PersonelId"));
+				contract.setYetkiId(resultSet.getInt("YetkiId"));
+				contract.setSifre(resultSet.getString("Sifre"));
+
+				datacontract.add(contract);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return datacontract;
+	}
+	
 	@Override
 	public AccountsContract Delete(AccountsContract Entity) {
 		// TODO Auto-generated method stub
@@ -99,7 +148,20 @@ public class AccountDAL extends ObjectHelper implements DALInterfaces<AccountsCo
 
 	@Override
 	public void Update(AccountsContract Entity) {
-		// TODO Auto-generated method stub
+		try (Connection connection = getConnection();
+				PreparedStatement preparedStatement = connection
+						.prepareStatement("UPDATE Accounts SET YetkiId = ?, Sifre = ? WHERE Id = ?")) {
+
+			preparedStatement.setInt(1, Entity.getYetkiId());
+			preparedStatement.setString(2, Entity.getSifre());
+			preparedStatement.setInt(3, Entity.getId());
+
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 
 	}
 

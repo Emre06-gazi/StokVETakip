@@ -21,7 +21,7 @@ import tr.com.ek.interfaces.FeInterfaces;
 import tr.com.ek.types.KategoriContract;
 import tr.com.ek.types.PersonelContract;
 
-public class PersonelEkleFE extends JDialog implements FeInterfaces{
+public class PersonelEkleFE extends JDialog implements FeInterfaces {
 
 	public PersonelEkleFE() {
 		initPencere();
@@ -30,52 +30,62 @@ public class PersonelEkleFE extends JDialog implements FeInterfaces{
 	@Override
 	public void initPencere() {
 		JPanel panel = initPanel();
-		
+
 		panel.setBorder(BorderFactory.createTitledBorder("Personel Kayıt Alanı"));
-		
+
 		add(panel);
-		
+
 		setTitle("Personel Ekle");
 		pack();
 		setModalityType(DEFAULT_MODALITY_TYPE);// üst üste açılan pencerelerde arkadaki pencereye tıklanmasını önler.
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
-		
+
 	}
 
 	@Override
 	public JPanel initPanel() {
 		JPanel panel = new JPanel(new GridLayout(3, 2));
-		
-		JLabel adiLabel = new JLabel("Personel Adı:",JLabel.RIGHT);
+
+		JLabel adiLabel = new JLabel("Personel Adı:", JLabel.RIGHT);
 		panel.add(adiLabel);
 		JTextField adiField = new JTextField(10);
 		panel.add(adiField);
-		JLabel emailLabel = new JLabel("Email Adresi Giriniz:",JLabel.RIGHT);
+		JLabel emailLabel = new JLabel("Email Adresi Giriniz:", JLabel.RIGHT);
 		panel.add(emailLabel);
 		JTextField emailField = new JTextField(10);
 		panel.add(emailField);
 		JButton kaydetButton = new JButton("Kaydet");
 		panel.add(kaydetButton);
-		
+
 		kaydetButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PersonelContract contract = new PersonelContract();
 				contract.setAdiSoyadi(adiField.getText());
 				contract.setEmail(emailField.getText());
-				
+
 				new PersonelDAL().Insert(contract);
-				JOptionPane.showMessageDialog(null, contract.getAdiSoyadi() +" adlı personel eklenmiştir.");
-				
+				JOptionPane.showMessageDialog(null, contract.getAdiSoyadi() + " adlı personel eklenmiştir.");
+
 			}
-			
+
 		});
-		
+
 		JButton iptalButton = new JButton("İptal");
 		panel.add(iptalButton);
+
+		iptalButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+
+		});
+
 		return panel;
 	}
 

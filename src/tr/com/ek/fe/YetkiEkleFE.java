@@ -20,7 +20,7 @@ import tr.com.ek.interfaces.FeInterfaces;
 import tr.com.ek.types.PersonelContract;
 import tr.com.ek.types.Yetkiler;
 
-public class YetkiEkleFE extends JDialog implements FeInterfaces{
+public class YetkiEkleFE extends JDialog implements FeInterfaces {
 
 	public YetkiEkleFE() {
 		initPencere();
@@ -29,47 +29,57 @@ public class YetkiEkleFE extends JDialog implements FeInterfaces{
 	@Override
 	public void initPencere() {
 		JPanel panel = initPanel();
-		
+
 		panel.setBorder(BorderFactory.createTitledBorder("Yetki Kayıt Alanı"));
-		
+
 		add(panel);
-		
+
 		setTitle("Yetki Ekle");
 		pack();
 		setModalityType(DEFAULT_MODALITY_TYPE);// üst üste açılan pencerelerde arkadaki pencereye tıklanmasını önler.
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
-		
+
 	}
 
 	@Override
 	public JPanel initPanel() {
 		JPanel panel = new JPanel(new GridLayout(3, 2));
-		
-		JLabel adiLabel = new JLabel("Yetki Adı:",JLabel.RIGHT);
+
+		JLabel adiLabel = new JLabel("Yetki Adı:", JLabel.RIGHT);
 		panel.add(adiLabel);
 		JTextField adiField = new JTextField(10);
 		panel.add(adiField);
 		JButton kaydetButton = new JButton("Kaydet");
 		panel.add(kaydetButton);
-		
+
 		kaydetButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Yetkiler contract = new Yetkiler();
 				contract.setAdi(adiField.getText());
-				
+
 				new YetkilerDAL().Insert(contract);
-				JOptionPane.showMessageDialog(null, contract.getAdi() +" adlı yetki eklenmiştir.");
-				
+				JOptionPane.showMessageDialog(null, contract.getAdi() + " adlı yetki eklenmiştir.");
+
 			}
-			
+
 		});
-		
+
 		JButton iptalButton = new JButton("İptal");
 		panel.add(iptalButton);
+
+		iptalButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+
+		});
+
 		return panel;
 	}
 

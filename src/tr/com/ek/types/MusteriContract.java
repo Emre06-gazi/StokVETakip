@@ -5,7 +5,6 @@ public class MusteriContract {
 	private String adiSoyadi;
 	private String telefon;
 	private String adres;
-	private int sehirId;
 	public int getId() {
 		return id;
 	}
@@ -30,12 +29,7 @@ public class MusteriContract {
 	public void setAdres(String adres) {
 		this.adres = adres;
 	}
-	public int getSehirId() {
-		return sehirId;
-	}
-	public void setSehirId(int sehirId) {
-		this.sehirId = sehirId;
-	}
+
 	@Override
 	public String toString( ) {
 		return adiSoyadi;

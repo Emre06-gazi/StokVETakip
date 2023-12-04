@@ -1,6 +1,7 @@
 package tr.com.ek.dal;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -116,20 +117,21 @@ public class KategoriDAL extends ObjectHelper implements DALInterfaces<KategoriC
 
 	@Override
 	public void Update(KategoriContract Entity) {
-		Connection connection = getConnection();
-		try {
-			Statement statement = connection.createStatement();
+	    try (Connection connection = getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(
+	                 "UPDATE Kategori SET Adi = ?, ParentId = ? WHERE Id = ?")) {
 
-			statement.executeUpdate("UPDATE Kategori SET Adi= '" + Entity.getAdi() + "', ParentId = "
-					+ Entity.getParentId() + " WHERE Id = " + Entity.getId() + "");
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	        preparedStatement.setString(1, Entity.getAdi());
+	        preparedStatement.setInt(2, Entity.getParentId());
+	        preparedStatement.setInt(3, Entity.getId());
 
+	        preparedStatement.executeUpdate();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
+
 
 	@Override
 	public List<KategoriContract> GetById(int id) {
