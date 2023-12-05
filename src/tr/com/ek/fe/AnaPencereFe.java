@@ -88,7 +88,7 @@ public class AnaPencereFe extends JFrame implements FeInterfaces {
 		JPanel satisPanel = new JPanel(new BorderLayout());
 
 		/* STOK PANELİ */
-		JPanel stokSolPanel = new JPanel(new GridLayout(7, 5));
+		JPanel stokSolPanel = new JPanel(new GridLayout(5, 2));
 		Object[] stokKolonlar = { "Id", "Ürün Adı", "Personel Adı", "Tarihi", "Adeti" };
 		DefaultTableModel model = new DefaultTableModel(stokKolonlar, 0);
 		JTable table = new JTable(model);
@@ -183,56 +183,54 @@ public class AnaPencereFe extends JFrame implements FeInterfaces {
 		});
 
 		stokGuncelleButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        int selectedRow = table.getSelectedRow();
-		        if (selectedRow != -1) {
-		            int stokId = (int) table.getValueAt(selectedRow, 0);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow != -1) {
+					int stokId = (int) table.getValueAt(selectedRow, 0);
 
-		            // Retrieve the selected values from the table
-		            UrunlerContract selectedUrun = (UrunlerContract) stokUrunAdıBox.getSelectedItem();
-		            int adet = Integer.parseInt(adetField.getText());
+					// Retrieve the selected values from the table
+					UrunlerContract selectedUrun = (UrunlerContract) stokUrunAdıBox.getSelectedItem();
+					int adet = Integer.parseInt(adetField.getText());
 
-		            // Check if the date is not null
-		            Date selectedDate = stokTarihi.getDate();
-		            if (selectedDate != null) {
-		                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		                String tarih = format.format(selectedDate);
+					// Check if the date is not null
+					Date selectedDate = stokTarihi.getDate();
+					if (selectedDate != null) {
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						String tarih = format.format(selectedDate);
 
-		                // Create a StokContract object with the updated values
-		                StokContract updatedStok = new StokContract();
-		                updatedStok.setId(stokId);
-		                updatedStok.setUrunId(selectedUrun.getId());
-		                updatedStok.setAdet(adet);
-		                updatedStok.setTarih(tarih);
+						// Create a StokContract object with the updated values
+						StokContract updatedStok = new StokContract();
+						updatedStok.setId(stokId);
+						updatedStok.setUrunId(selectedUrun.getId());
+						updatedStok.setAdet(adet);
+						updatedStok.setTarih(tarih);
 
-		                // Update the Stok record in the database
-		                new StokDAL().Update(updatedStok);
+						// Update the Stok record in the database
+						new StokDAL().Update(updatedStok);
 
-		                // Update the table model with the new data
-		                model.setValueAt(stokId, selectedRow, 0);
-		                model.setValueAt(selectedUrun.getAdi(), selectedRow, 1);
-		                model.setValueAt(adet, selectedRow, 4); // Update the adet column
+						// Update the table model with the new data
+						model.setValueAt(stokId, selectedRow, 0);
+						model.setValueAt(selectedUrun.getAdi(), selectedRow, 1);
+						model.setValueAt(adet, selectedRow, 4); // Update the adet column
 
-		                JOptionPane.showMessageDialog(null, "Stok kaydı güncellendi.");
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Lütfen geçerli bir tarih seçin.");
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(null, "Lütfen bir stok kaydı seçin.");
-		        }
-		    }
+						JOptionPane.showMessageDialog(null, "Stok kaydı güncellendi.");
+					} else {
+						JOptionPane.showMessageDialog(null, "Lütfen geçerli bir tarih seçin.");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Lütfen bir stok kaydı seçin.");
+				}
+			}
 		});
 
 
-		stokPanel.add(stokSolPanel, BorderLayout.EAST);
-		stokPanel.add(stokTablePane, BorderLayout.CENTER);
 
 		/* Satış Paneli */
 
-		JPanel satisSagPanel = new JPanel(new BorderLayout());
+	
 		JPanel satisSagUstPanel = new JPanel(new GridLayout(6, 2));
-		JPanel satisSagAltPanel = new JPanel();
+
 
 		Object[] satisKolonlar = { "Id", "Müşteri Adı", "Personel Adı", "Ürün Adı", "Tarih", "Stok Adeti" };
 		DefaultTableModel modelSatis = new DefaultTableModel(satisKolonlar, 0);
@@ -298,29 +296,27 @@ public class AnaPencereFe extends JFrame implements FeInterfaces {
 
 				// Seçilen ürünün stok adedini kontrol et
 				stokContract = new StokDAL().GetByUrunId(uContract.getId());
-				if (stokContract.getAdet() >= Integer.parseInt(satisField.getText())) {
-					// Stok adeti yeterliyse satış işlemi gerçekleştir
-					contract.setPersonelId(pContract.getId());
-					contract.setUrunId(uContract.getId());
-					contract.setMusteriId(mContract.getId());
-					contract.setTarih(date.toString());
-					contract.setAdet(Integer.parseInt(satisField.getText()));
 
-					new SatisDAL().Insert(contract);
+				// Stok adeti yeterliyse satış işlemi gerçekleştir
+				contract.setPersonelId(pContract.getId());
+				contract.setUrunId(uContract.getId());
+				contract.setMusteriId(mContract.getId());
+				contract.setTarih(date.toString());
+				contract.setAdet(Integer.parseInt(satisField.getText()));
 
-					// Stok adedini güncelle
-					stokContract.setUrunId(uContract.getId());
-					stokContract.setPersonalId(pContract.getId());
-					stokContract.setTarih(date.toString());
-					stokContract.setAdet(-Integer.parseInt(satisField.getText()));
+				new SatisDAL().Insert(contract);
 
-					new StokDAL().Update(stokContract);
+				// Stok adedini güncelle
+				stokContract.setUrunId(uContract.getId());
+				stokContract.setPersonalId(pContract.getId());
+				stokContract.setTarih(date.toString());
+				stokContract.setAdet(-Integer.parseInt(satisField.getText()));
 
-					JOptionPane.showMessageDialog(null, "Ürün satış kaydı tamamlandı. Stoklarda " + uContract.getAdi()
-							+ " ürününden " + contract.getAdet() + " adet azalmıştır.");
-				} else {
-					JOptionPane.showMessageDialog(null, "Stok adeti yetersiz. Ürün satışı gerçekleştirilemedi.");
-				}
+				new StokDAL().Update(stokContract);
+
+				JOptionPane.showMessageDialog(null, "Ürün satış kaydı tamamlandı. Stoklarda " + uContract.getAdi()
+						+ " ürününden " + contract.getAdet() + " adet azalmıştır.");
+
 				int satir = modelSatis.getRowCount();
 				for (int i = 0; i < satir; i++) {
 					modelSatis.removeRow(0); // Tabloyu silip tekrar yüklemek için
@@ -332,58 +328,55 @@ public class AnaPencereFe extends JFrame implements FeInterfaces {
 		});
 
 		satisGuncelleButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        int selectedRow = satisTable.getSelectedRow();
-		        if (selectedRow != -1) {
-		            int satisId = (int) satisTable.getValueAt(selectedRow, 0);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = satisTable.getSelectedRow();
+				if (selectedRow != -1) {
+					int satisId = (int) satisTable.getValueAt(selectedRow, 0);
 
-		            // Retrieve the selected values from the table
-		            UrunlerContract selectedUrun = (UrunlerContract) satisUrunAdıBox.getSelectedItem();
-		            MusteriContract selectedMusteri = (MusteriContract) satisMusteriAdıBox.getSelectedItem();
-		            int adet = Integer.parseInt(satisField.getText());
+					// Retrieve the selected values from the table
+					UrunlerContract selectedUrun = (UrunlerContract) satisUrunAdıBox.getSelectedItem();
+					MusteriContract selectedMusteri = (MusteriContract) satisMusteriAdıBox.getSelectedItem();
+					int adet = Integer.parseInt(satisField.getText());
 
-		            // Check if the date is not null
-		            Date selectedDate = satisTarihi.getDate();
-		            if (selectedDate != null) {
-		                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		                String tarih = format.format(selectedDate);
+					// Check if the date is not null
+					Date selectedDate = satisTarihi.getDate();
+					if (selectedDate != null) {
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						String tarih = format.format(selectedDate);
 
-		                // Create a SatisContract object with the updated values
-		                SatisContract updatedSatis = new SatisContract();
-		                updatedSatis.setId(satisId);
-		                updatedSatis.setUrunId(selectedUrun.getId());
-		                updatedSatis.setMusteriId(selectedMusteri.getId());
-		                updatedSatis.setAdet(adet);
-		                updatedSatis.setTarih(tarih);
+						// Create a SatisContract object with the updated values
+						SatisContract updatedSatis = new SatisContract();
+						updatedSatis.setId(satisId);
+						updatedSatis.setUrunId(selectedUrun.getId());
+						updatedSatis.setMusteriId(selectedMusteri.getId());
+						updatedSatis.setAdet(adet);
+						updatedSatis.setTarih(tarih);
 
-		                // Update the Satis record in the database
-		                new SatisDAL().Update(updatedSatis);
+						// Update the Satis record in the database
+						new SatisDAL().Update(updatedSatis);
 
-		                // Update the table model with the new data
-		                modelSatis.setValueAt(satisId, selectedRow, 0);
-		                modelSatis.setValueAt(selectedMusteri.getAdiSoyadi(), selectedRow, 1);
-		                modelSatis.setValueAt(selectedUrun.getAdi(), selectedRow, 2);
-		                modelSatis.setValueAt(adet, selectedRow, 5); // Update the adet column
+						// Update the table model with the new data
+						modelSatis.setValueAt(satisId, selectedRow, 0);
+						modelSatis.setValueAt(selectedMusteri.getAdiSoyadi(), selectedRow, 1);
+						modelSatis.setValueAt(selectedUrun.getAdi(), selectedRow, 2);
+						modelSatis.setValueAt(adet, selectedRow, 5); // Update the adet column
 
-		                JOptionPane.showMessageDialog(null, "Satış kaydı güncellendi.");
-		            } else {
-		                JOptionPane.showMessageDialog(null, "Lütfen geçerli bir tarih seçin.");
-		            }
-		        } else {
-		            JOptionPane.showMessageDialog(null, "Lütfen bir satış kaydı seçin.");
-		        }
-		    }
+						JOptionPane.showMessageDialog(null, "Satış kaydı güncellendi.");
+					} else {
+						JOptionPane.showMessageDialog(null, "Lütfen geçerli bir tarih seçin.");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Lütfen bir satış kaydı seçin.");
+				}
+			}
 		});
 
 		stokPanel.add(stokSolPanel, BorderLayout.EAST);
 		stokPanel.add(stokTablePane, BorderLayout.CENTER);
 
-		satisPanel.add(satisSagPanel, BorderLayout.EAST);
+		satisPanel.add(satisSagUstPanel, BorderLayout.EAST);
 		satisPanel.add(SatisTablePane, BorderLayout.CENTER);
-
-		satisSagPanel.add(satisSagUstPanel, BorderLayout.NORTH);
-		satisSagPanel.add(satisSagAltPanel, BorderLayout.SOUTH);
 
 		pane.addTab("Stoklar", icon, stokPanel, "Does Nothing");
 		pane.addTab("Satışlar", icon2, satisPanel, "Does Nothingg");
